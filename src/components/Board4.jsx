@@ -40,7 +40,6 @@ function Board4({ size }) {
       const newScores = { ...scores };
       newScores[winner] += 1;
       setScores(newScores);
-      setHistoryPlay([]);
       localStorage.setItem("ticTacToeScores", JSON.stringify(newScores));
     } else if (historyPlay.length + 1 === size) {
       // No winner and all squares are occupied, it's a draw
@@ -111,7 +110,9 @@ function Board4({ size }) {
     return null;
   }
 
+  //Close Modal Alert Winner Or Draw
   const closeModal = () => {
+    handleNewGame()
     setShowModal(false);
   };
 
@@ -123,7 +124,7 @@ function Board4({ size }) {
           <Modal
             closeModal={closeModal}
             winner={winner ? winner : "Draw"}
-            handleNewGame={handleNewGame}
+      
           />
         )}
         <div className="score fixed right-5 m-5 select-none top-0">
@@ -150,7 +151,7 @@ function Board4({ size }) {
             {historyPlay.map((h, i) => (
               <div key={i} className="flex  gap-3">
                 <p>Player: {h?.mark}</p>
-                <p>move: {h?.move}</p>
+                <p>move: {h?.move + 1}</p>
               </div>
             ))}
           </div>
@@ -161,7 +162,7 @@ function Board4({ size }) {
       transition-all duration-300"
         onClick={() => handleReset()}
       >
-        Reset
+         Reset Game
       </button>
     </>
   );

@@ -27,7 +27,7 @@
 
 .row::after {
   clear: both;
-  content: '';
+  content: "";
   display: table;
 }
 
@@ -39,7 +39,6 @@ p:hover {
   transition: 250ms;
 }
 
-
 .X {
   color: rgb(132, 0, 0);
   font-weight: bold;
@@ -47,4 +46,14 @@ p:hover {
 .O {
   color: rgb(0, 150, 55);
   font-weight: bold;
+}
+
+.square:hover {
+  box-shadow: 11px 8px 29px -1px rgba(201, 192, 192, 0.75);
+  -webkit-box-shadow: 11px 8px 29px -1px rgba(201, 192, 192, 0.75);
+  -moz-box-shadow: 11px 8px 29px -1px rgba(201, 192, 192, 0.75);
+}
+
+.square:hover.X, .square:hover.O {
+  box-shadow: none;
 }
