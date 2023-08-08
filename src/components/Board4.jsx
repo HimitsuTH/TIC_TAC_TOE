@@ -49,10 +49,15 @@ function Board4({ size }) {
   };
 
   //Square
-
   const renderSquare = (index) => (
-    <button className="square" onClick={() => handleClick(index)} key={index}>
-      {board[index]}
+    <button
+      className={`square ${
+        board[index] == "X" ? "X" : board[index] == "O" ? "O" : ""
+      }`}
+      onClick={() => handleClick(index)}
+      key={index}
+    >
+      {board[index] ? board[index] : ""}
     </button>
   );
 
