@@ -1,8 +1,7 @@
-/* eslint-disable no-unused-vars */
 import { useState } from "react";
 import Modal from "./Modal";
 
-function Board4({ size }) {
+function Board3({ size }) {
   const [board, setBoard] = useState(Array(size).fill(null));
   const [showModal, setShowModal] = useState(false);
 
@@ -15,9 +14,11 @@ function Board4({ size }) {
   //Set start player
   const [xPlaying, setXPlaying] = useState(true);
 
+  //   console.log(board);
+
   // get winner
   const winner = calculateWinner(board);
-  //Game Status
+  // status game
   const status = winner
     ? `Winner: ${winner}`
     : `Next player: ${xPlaying ? "X" : "O"}`;
@@ -49,10 +50,15 @@ function Board4({ size }) {
   };
 
   //Square
-
   const renderSquare = (index) => (
-    <button className="square" onClick={() => handleClick(index)} key={index}>
-      {board[index]}
+    <button
+      className={`square ${
+        board[index] == "X" ? "X" : board[index] == "O" ? "O" : ""
+      }`}
+      onClick={() => handleClick(index)}
+      key={index}
+    >
+      {board[index] ? board[index] : ""}
     </button>
   );
 
@@ -71,33 +77,25 @@ function Board4({ size }) {
     setHistoryPlay([]);
   };
 
-  // Check Winner 4x4
+  // Check Winner 3X3
   function calculateWinner(squares) {
     const lines = [
-      // Rows
-      [0, 1, 2, 3],
-      [4, 5, 6, 7],
-      [8, 9, 10, 11],
-      [12, 13, 14, 15],
-
-      // Columns
-      [0, 4, 8, 12],
-      [1, 5, 9, 13],
-      [2, 6, 10, 14],
-      [3, 7, 11, 15],
-
-      // Diagonals
-      [0, 5, 10, 15],
-      [3, 6, 9, 12],
+      [0, 1, 2],
+      [3, 4, 5],
+      [6, 7, 8],
+      [0, 3, 6],
+      [1, 4, 7],
+      [2, 5, 8],
+      [0, 4, 8],
+      [2, 4, 6],
     ];
 
     for (let i = 0; i < lines.length; i++) {
-      const [a, b, c, d] = lines[i];
+      const [a, b, c] = lines[i];
       if (
         squares[a] &&
         squares[a] === squares[b] &&
-        squares[a] === squares[c] &&
-        squares[a] === squares[d]
+        squares[a] === squares[c]
       ) {
         return squares[a];
       }
@@ -131,19 +129,19 @@ function Board4({ size }) {
         </div>
         <div className=" flex flex-row relative">
           <div className="board">
-            {Array(4)
+            {Array(3)
               .fill(null)
               .map((_, row) => (
                 <div className="row" key={row}>
-                  {Array(4)
+                  {Array(3)
                     .fill(null)
-                    .map((_, col) => renderSquare(row * 4 + col))}
+                    .map((_, col) => renderSquare(row * 3 + col))}
                 </div>
               ))}
           </div>
-          <div className="flex  flex-col overflow-y-scroll h-72 w-48 scroll p-3">
+          <div className="flex  flex-col overflow-y-scroll h-auto w-56 scroll">
             {historyPlay.map((h, i) => (
-              <div key={i} className="flex  gap-3">
+              <div key={i} className="flex justify-center gap-3">
                 <p>Player: {h?.mark}</p>
                 <p>move: {h?.move}</p>
               </div>
@@ -162,4 +160,4 @@ function Board4({ size }) {
   );
 }
 
-export default Board4;
+export default Board3;

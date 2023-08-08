@@ -1,6 +1,6 @@
 import { useState } from "react";
 import "./App.css";
-import Board2 from "./components/Board2";
+import Board3 from "./components/Board3";
 import Board4 from "./components/Board4";
 
 function App() {
@@ -41,7 +41,7 @@ function App() {
         </li>
       </ul>
       <div className="board">
-        {tabActive == "tab1" ? <Board2 size={9} /> : <Board4 size={16} />}
+        {tabActive == "tab1" ? <Board3 size={9} /> : <Board4 size={16} />}
       </div>
     </div>
   );

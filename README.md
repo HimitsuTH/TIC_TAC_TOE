@@ -17,4 +17,4 @@ $ npm run dev
 
 
 ## :link: Demo
- <a href="https://xo-practice.netlify.app/" target="_blank"> Click here</a> to play my Demo
+ <a target="_blank" href="https://xo-practice.netlify.app/"> Click here</a> to play my Demo
