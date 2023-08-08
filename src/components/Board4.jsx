@@ -30,6 +30,7 @@ function Board4({ size }) {
       const newScores = { ...scores };
       newScores[winner] += 1;
       setScores(newScores);
+    
       localStorage.setItem('ticTacToeScores', JSON.stringify(newScores));
     }
   };
@@ -43,6 +44,8 @@ function Board4({ size }) {
   const handleReset = () => {
     setBoard(Array(size).fill(null));
     setXPlaying(true);
+    setScores({ X: 0, O: 0 })
+    localStorage.removeItem("ticTacToeScores")
   };
 
   function calculateWinner(squares) {
