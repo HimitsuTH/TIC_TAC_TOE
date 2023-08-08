@@ -14,3 +14,7 @@ $ npm install
 $ npm run dev
 
 ```
+
+
+## :link: Demo
+ <a href="https://xo-practice.netlify.app/" target="_blank"> Click here</a> to play my Demo
