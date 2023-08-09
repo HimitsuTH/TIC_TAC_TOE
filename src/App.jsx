@@ -2,6 +2,7 @@ import { useState } from "react";
 import "./App.css";
 import Board3 from "./components/Board3";
 import Board4 from "./components/Board4";
+import CustomBoard from "./components/CustomBoard";
 
 function App() {
   const [tabActive, setTabActive] = useState("tab1");
@@ -12,6 +13,7 @@ function App() {
   };
   return (
     <div className="App h-screen">
+      <CustomBoard/>
       <ul className=" border-b  flex-row gap-5  flex z-30 border-black transition-all mb-2 duration-700">
         <li
           id="tab1"
