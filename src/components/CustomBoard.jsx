@@ -6,10 +6,12 @@ import Modal from "./Modal";
 
 function CustomBoard() {
   const [history, setHistory] = useState([]);
+  const [showHistory, setShowHistory] = useState(false);
 
   const [inputSize, setInputSize] = useState(3);
   const [size, setSize] = useState(3);
 
+  //setInputSize
   const handleInputChange = (event) => {
     const newValue = event.target.value;
 
@@ -19,6 +21,7 @@ function CustomBoard() {
     }
   };
 
+  //Board
   const [board, setBoard] = useState(Array(size * size).fill(null | 0));
   //Score
   const savedScores = JSON.parse(localStorage.getItem("ticTacToeScores"));
@@ -27,6 +30,7 @@ function CustomBoard() {
   const [showModal, setShowModal] = useState(false);
   const [xIsNext, setXIsNext] = useState(true);
 
+  //handle when user click "Set Board" button❤
   const handleCustomBoard = () => {
     if (inputSize < 3) {
       alert("Board size must be at least 3.");
@@ -38,7 +42,9 @@ function CustomBoard() {
       return;
     } else {
       setSize(inputSize);
-      handleReset();
+      setBoard(Array(size).fill(null));
+      setXIsNext(true);
+      setHistory([]);
     }
   };
 
@@ -65,6 +71,7 @@ function CustomBoard() {
 
       // console.log(symbols)
 
+      // allEqual ? true : false
       const allEqual = symbols.every(
         (symbol) => symbol && symbol === symbols[0]
       );
@@ -76,6 +83,7 @@ function CustomBoard() {
     return null;
   }
 
+  // handle when user click Square
   const handleClick = (index) => {
     if (board[index] || calculateWinner(board, size)) {
       return;
@@ -85,8 +93,15 @@ function CustomBoard() {
 
     newBoard[index] = xIsNext ? "X" : "O";
     setBoard(newBoard);
-
     setXIsNext(!xIsNext);
+
+    setHistory((history) => [
+      ...history,
+      {
+        player: newBoard[index],
+        move: index + 1,
+      },
+    ]);
 
     const winner = calculateWinner(newBoard, size);
     if (winner) {
@@ -95,6 +110,8 @@ function CustomBoard() {
       newScores[winner] += 1;
       setScores(newScores);
       localStorage.setItem("ticTacToeScores", JSON.stringify(newScores));
+    } else if (history.length + 1 === size * size) {
+      setShowModal(true);
     }
   };
 
@@ -123,10 +140,11 @@ function CustomBoard() {
     setBoard(Array(size).fill(null));
     setXIsNext(true);
     setScores({ X: 0, O: 0 });
-    // setHistoryPlay([]);
+    setHistory([]);
     localStorage.removeItem("ticTacToeScores");
   };
 
+  //New Game "Round -->>>"
   const handleNewGame = () => {
     setBoard(Array(size).fill(null));
     setXIsNext(true);
@@ -144,44 +162,84 @@ function CustomBoard() {
       {showModal && (
         <Modal closeModal={closeModal} winner={winner ? winner : "Draw"} />
       )}
-
+      <div className="status text-lg font-bold select-none text-white bg-slate-800 p-5 rounded-lg">
+        {status}
+      </div>
       <div className="score fixed right-5 m-5 select-none top-0">
         <p className=" p-3 rounded-xl bg-red-800 mb-2 text-white">
-          Player X: {scores.X}
+          Player X : <strong>{scores.X}</strong>
         </p>
         <p className=" p-3 rounded-xl bg-green-800  text-white">
-          Player O: {scores.O}
+          Player O : <strong>{scores.O}</strong>
         </p>
       </div>
-      <div className="status text-lg font-bold select-none text-white bg-slate-800 p-5 rounded-lg">{status}</div>
 
-      <div className="board">
-        {Array(size)
-          .fill(null)
-          .map((_, row) => (
-            <div className="row" key={row}>
-              {Array(size)
-                .fill(null)
-                .map((_, col) => renderSquare(row * size + col))}
-            </div>
-          ))}
-      </div>
-      <div className=" flex gap-x-5  p-1 items-center text-xs md:text-base">
-        <label htmlFor="boardSize">Enter board size: </label>
-        <input
-          type="number"
-          id="boardSize"
-          className=" text-center rounded-lg "
-          value={inputSize}
-          onChange={handleInputChange}
-        />
-        <button
-          onClick={handleCustomBoard}
-          className=" bg-blue-600 p-2 rounded-xl text-white hover:bg-blue-700 hover:shadow-blue-400 shadow-md "
-        >
-          Set Board
-        </button>
-      </div>
+      <main className=" flex flex-col justify-center items-center">
+        <div className=" container">
+          <div className="board">
+            {Array(size)
+              .fill(null)
+              .map((_, row) => (
+                <div className="row" key={row}>
+                  {Array(size)
+                    .fill(null)
+                    .map((_, col) => renderSquare(row * size + col))}
+                </div>
+              ))}
+          </div>
+          <div className=" flex gap-x-5  p-1 items-center text-xs md:text-base">
+            <label htmlFor="boardSize" className=" select-none">Enter board size : </label>
+            <input
+              type="number"
+              id="boardSize"
+              className=" text-center rounded-lg "
+              value={inputSize}
+              onChange={handleInputChange}
+            />
+            <button
+              onClick={handleCustomBoard}
+              className=" bg-blue-600 p-2 rounded-xl text-white hover:bg-blue-700 hover:shadow-blue-400 shadow-md "
+            >
+              Set Board
+            </button>
+          </div>
+        </div>
+        <div className=" flex gap-x-2">
+          <button
+            className="p-2 mt-5 bg-slate-700 text-white rounded-md hover:bg-slate-200 hover:text-slate-700 
+           transition-all duration-300"
+            onClick={() => handleReset()}
+          >
+            Reset Game
+          </button>
+          <button
+            className="p-2 mt-5 bg-slate-700 text-white rounded-md hover:bg-slate-200 hover:text-slate-700 
+           transition-all duration-300"
+            onClick={() => setShowHistory((showHistory) => !showHistory)}
+          >
+            History
+          </button>
+        </div>
+      </main>
+      {showHistory && (
+        <div className="fixed right-2 z-20 top-48 bg-white">
+          <p className=" font-bold select-none">History Board</p>
+          <ul className="flex  flex-col overflow-y-scroll h-56 w-52 md:w-72 scroll shadow-md gap-y-2">
+            {history.map((h, i) => (
+              <ol
+                key={i}
+                className="flex gap-3 bg-slate-600 text-white items-center text-xs md:text-base border mx-2 p-2 "
+              >
+                <p >Turn : {i + 1}</p>
+                <div className="flex gap-x-2">
+                  <p>Player: {h?.player}</p>
+                  <p>move: {h?.move}</p>
+                </div>
+              </ol>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 }
