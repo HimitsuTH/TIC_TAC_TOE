@@ -2,23 +2,23 @@
 import { useState } from "react";
 import Modal from "./Modal";
 
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
+
 // console.log(calculateWinner)
 
 function CustomBoard() {
   const [history, setHistory] = useState([]);
-  const [showHistory, setShowHistory] = useState(false);
+  const [showHistory, setShowHistory] = useState(true);
 
   const [inputSize, setInputSize] = useState(3);
   const [size, setSize] = useState(3);
 
   //setInputSize
-  const handleInputChange = (event) => {
-    const newValue = event.target.value;
-
-    // Check if the new value is a valid number
-    if (!isNaN(newValue)) {
-      setInputSize(parseInt(newValue));
-    }
+  const handleChange = (event) => {
+    setInputSize(event.target.value);
   };
 
   //Board
@@ -33,15 +33,13 @@ function CustomBoard() {
   //handle when user click "Set Board" button❤
   const handleCustomBoard = () => {
     if (inputSize < 3) {
-      alert("Board size must be at least 3.");
-
-      return;
-    } else if (inputSize > 6) {
-      alert("board size up to 6");
-
       return;
     } else {
-      setSize(inputSize);
+      if (isNaN(inputSize)) {
+        setSize(3);
+      } else {
+        setSize(inputSize);
+      }
       setBoard(Array(size).fill(null));
       setXIsNext(true);
       setHistory([]);
@@ -187,15 +185,25 @@ function CustomBoard() {
                 </div>
               ))}
           </div>
-          <div className=" flex gap-x-5  p-1 items-center text-xs md:text-base">
-            <label htmlFor="boardSize" className=" select-none">Enter board size : </label>
-            <input
-              type="number"
-              id="boardSize"
-              className=" text-center rounded-lg "
-              value={inputSize}
-              onChange={handleInputChange}
-            />
+          <div className=" flex gap-x-5  p-1 items-center text-xs md:text-base justify-center">
+            <FormControl sx={{ m: 1, minWidth: 120 }}>
+              <InputLabel id="demo-simple-select-helper-label">Size</InputLabel>
+              <Select
+                labelId="demo-simple-select-helper-label"
+                id="demo-simple-select-helper"
+                value={inputSize}
+                label="Size"
+                onChange={handleChange}
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                <MenuItem value={3}>3</MenuItem>
+                <MenuItem value={4}>4</MenuItem>
+                <MenuItem value={5}>5</MenuItem>
+                <MenuItem value={6}>6</MenuItem>
+              </Select>
+            </FormControl>
             <button
               onClick={handleCustomBoard}
               className=" bg-blue-600 p-2 rounded-xl text-white hover:bg-blue-700 hover:shadow-blue-400 shadow-md "
@@ -230,7 +238,7 @@ function CustomBoard() {
                 key={i}
                 className="flex gap-3 bg-slate-600 text-white items-center text-xs md:text-base border mx-2 p-2 "
               >
-                <p >Turn : {i + 1}</p>
+                <p>Turn : {i + 1}</p>
                 <div className="flex gap-x-2">
                   <p>Player: {h?.player}</p>
                   <p>move: {h?.move}</p>
