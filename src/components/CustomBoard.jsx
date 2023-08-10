@@ -23,7 +23,9 @@ function CustomBoard() {
   };
 
   //Board
-  const [board, setBoard] = useState(Array(size * size).fill(null | 0));
+  const [board, setBoard] = useState(Array(size*size).fill(null));
+  // console.log(size*size)
+  // console.log(board)
   //Score
   const savedScores = JSON.parse(localStorage.getItem("ticTacToeScores"));
   const [scores, setScores] = useState(savedScores || { X: 0, O: 0 });
@@ -126,7 +128,8 @@ function CustomBoard() {
       },
     ]);
 
-    //check winner show Winner or Draw
+    //check winner 
+    //If win determines the winner's score., else if Check all index board sizes are not null. = "Draw"
     const winner = calculateWinner(newBoard, size);
     if (winner) {
       setShowModal(true);
