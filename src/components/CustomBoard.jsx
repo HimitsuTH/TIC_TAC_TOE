@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { useState } from "react";
 import Modal from "./Modal";
+import HistoryBoard from "./HistoryBoard";
 
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
@@ -46,45 +47,45 @@ function CustomBoard() {
     const lines = [];
 
     // Generate winning combinations for rows
-    for (let row = 0; row < size; row++) {
-      for (let col = 0; col <= size - 3; col++) {
+    for (let row = 0; row < boardSize; row++) {
+      for (let col = 0; col <= boardSize - 3; col++) {
         lines.push([
-          row * size + col,
-          row * size + col + 1,
-          row * size + col + 2,
+          row * boardSize + col,
+          row * boardSize + col + 1,
+          row * boardSize + col + 2,
         ]);
       }
     }
 
     // Generate winning combinations for columns
-    for (let col = 0; col < size; col++) {
-      for (let row = 0; row <= size - 3; row++) {
+    for (let col = 0; col < boardSize; col++) {
+      for (let row = 0; row <= boardSize - 3; row++) {
         lines.push([
-          row * size + col,
-          (row + 1) * size + col,
-          (row + 2) * size + col,
+          row * boardSize + col,
+          (row + 1) * boardSize + col,
+          (row + 2) * boardSize + col,
         ]);
       }
     }
 
     // Generate winning combinations for diagonals (top-left to bottom-right)
-    for (let row = 0; row <= size - 3; row++) {
-      for (let col = 0; col <= size - 3; col++) {
+    for (let row = 0; row <= boardSize - 3; row++) {
+      for (let col = 0; col <= boardSize - 3; col++) {
         lines.push([
-          row * size + col,
-          (row + 1) * size + col + 1,
-          (row + 2) * size + col + 2,
+          row * boardSize + col,
+          (row + 1) * boardSize + col + 1,
+          (row + 2) * boardSize + col + 2,
         ]);
       }
     }
 
     // Generate winning combinations for diagonals (bottom-left to top-right)
-    for (let row = 2; row < size; row++) {
-      for (let col = 0; col <= size - 3; col++) {
+    for (let row = 2; row < boardSize; row++) {
+      for (let col = 0; col <= boardSize - 3; col++) {
         lines.push([
-          row * size + col,
-          (row - 1) * size + col + 1,
-          (row - 2) * size + col + 2,
+          row * boardSize + col,
+          (row - 1) * boardSize + col + 1,
+          (row - 2) * boardSize + col + 2,
         ]);
       }
     }
@@ -255,23 +256,7 @@ function CustomBoard() {
         </div>
       </main>
       {showHistory && (
-        <div className="fixed right-2 z-20 top-48 bg-white">
-          <p className=" font-bold select-none">History Board</p>
-          <ul className="flex  flex-col overflow-y-scroll h-56 w-52 md:w-72 scroll shadow-md gap-y-2">
-            {history.map((h, i) => (
-              <ol
-                key={i}
-                className="flex gap-3 bg-slate-600 text-white items-center text-xs md:text-base border mx-2 p-2 "
-              >
-                <p>Turn : {i + 1}</p>
-                <div className="flex gap-x-2">
-                  <p>Player: {h?.player}</p>
-                  <p>move: {h?.move}</p>
-                </div>
-              </ol>
-            ))}
-          </ul>
-        </div>
+       <HistoryBoard history={history}/>
       )}
     </div>
   );
