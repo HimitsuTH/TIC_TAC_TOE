@@ -133,6 +133,7 @@ function CustomBoard() {
     const winner = calculateWinner(newBoard, size);
     if (winner) {
       setShowModal(true);
+      setShowHistory(false);
       const newScores = { ...scores };
       newScores[winner] += 1;
       setScores(newScores);
@@ -185,11 +186,11 @@ function CustomBoard() {
   };
 
   return (
-    <div className="flex flex-col justify-center items-center">
+    <div className="flex flex-col justify-center items-center h-auto mt-3 md:mt-0">
       {showModal && (
-        <Modal closeModal={closeModal} winner={winner ? winner : "Draw"} />
+        <Modal closeModal={closeModal} winner={winner ? winner : "Draw"} history={history} />
       )}
-      <div className="status text-lg font-bold select-none text-white bg-slate-800 p-5 rounded-lg">
+      <div className="status text-md font-bold select-none text-white bg-slate-800 p-3 md:p-5 rounded-lg md:text-lg">
         {status}
       </div>
       <div className="flex justify-center select-none mb-2 gap-x-3 ">
