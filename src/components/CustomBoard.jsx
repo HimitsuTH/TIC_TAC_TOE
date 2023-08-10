@@ -164,9 +164,7 @@ function CustomBoard() {
   const winner = calculateWinner(board, size)?.winner;
   // console.log(winner)
   // status game
-  const status = winner
-    ? `Winner: ${winner}`
-    : `Next player : "${xIsNext ? "X" : "O"}"`;
+  const status = `Next player : "${xIsNext ? "X" : "O"}"`;
 
   //Square
   const renderSquare = (index) => (
@@ -183,11 +181,12 @@ function CustomBoard() {
 
   //@Reset Board
   const handleReset = () => {
-    setBoard(Array(size).fill(null));
-    setXIsNext(true);
+    // setBoard(Array(size).fill(null));
+    // setXIsNext(true);
+    // setHistory([]);
+    // setLineWin("");
+    handleNewGame();
     setScores({ X: 0, O: 0 });
-    setHistory([]);
-    setLineWin("");
     localStorage.removeItem("ticTacToeScores");
   };
 
@@ -273,7 +272,7 @@ function CustomBoard() {
            transition-all duration-300"
             onClick={() => handleReset()}
           >
-            Reset Game
+            Reset
           </button>
           <button
             className="p-2 mt-5 bg-slate-700 text-white rounded-md hover:bg-slate-200 hover:text-slate-700 
