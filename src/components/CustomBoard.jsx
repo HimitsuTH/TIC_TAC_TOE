@@ -88,7 +88,7 @@ function CustomBoard() {
         ]);
       }
     }
-    console.log(lines);
+    // console.log(lines);
 
     // Check for a winner in each line
     for (const line of lines) {
