@@ -11,9 +11,9 @@ import Select from "@mui/material/Select";
 
 function CustomBoard() {
   const [history, setHistory] = useState([]);
-  const [showHistory, setShowHistory] = useState(true);
+  const [showHistory, setShowHistory] = useState(false);
 
-  const [inputSize, setInputSize] = useState(3);
+  const [inputSize, setInputSize] = useState("");
   const [size, setSize] = useState(3);
 
   //setInputSize
@@ -35,46 +35,70 @@ function CustomBoard() {
     if (inputSize < 3) {
       return;
     } else {
-      if (isNaN(inputSize)) {
-        setSize(3);
-      } else {
-        setSize(inputSize);
-      }
+      setSize(inputSize);
       setBoard(Array(size).fill(null));
       setXIsNext(true);
       setHistory([]);
     }
   };
 
-  function calculateWinner(squares, size) {
+  function calculateWinner(squares, boardSize) {
     const lines = [];
 
     // Generate winning combinations for rows
     for (let row = 0; row < size; row++) {
-      lines.push(Array.from({ length: size }, (_, col) => row * size + col));
+      for (let col = 0; col <= size - 3; col++) {
+        lines.push([
+          row * size + col,
+          row * size + col + 1,
+          row * size + col + 2,
+        ]);
+      }
     }
 
     // Generate winning combinations for columns
     for (let col = 0; col < size; col++) {
-      lines.push(Array.from({ length: size }, (_, row) => row * size + col));
+      for (let row = 0; row <= size - 3; row++) {
+        lines.push([
+          row * size + col,
+          (row + 1) * size + col,
+          (row + 2) * size + col,
+        ]);
+      }
     }
 
-    // Generate winning combinations for diagonals
-    lines.push(Array.from({ length: size }, (_, i) => i * (size + 1)));
-    lines.push(Array.from({ length: size }, (_, i) => (i + 1) * (size - 1)));
+    // Generate winning combinations for diagonals (top-left to bottom-right)
+    for (let row = 0; row <= size - 3; row++) {
+      for (let col = 0; col <= size - 3; col++) {
+        lines.push([
+          row * size + col,
+          (row + 1) * size + col + 1,
+          (row + 2) * size + col + 2,
+        ]);
+      }
+    }
+
+    // Generate winning combinations for diagonals (bottom-left to top-right)
+    for (let row = 2; row < size; row++) {
+      for (let col = 0; col <= size - 3; col++) {
+        lines.push([
+          row * size + col,
+          (row - 1) * size + col + 1,
+          (row - 2) * size + col + 2,
+        ]);
+      }
+    }
+    console.log(lines);
 
     // Check for a winner in each line
     for (const line of lines) {
-      const symbols = line.map((index) => squares[index]);
-
-      // console.log(symbols)
-
-      // allEqual ? true : false
-      const allEqual = symbols.every(
-        (symbol) => symbol && symbol === symbols[0]
-      );
-      if (allEqual) {
-        return symbols[0];
+      const [a, b, c] = line;
+      if (
+        squares[a] &&
+        squares[a] === squares[b] &&
+        squares[a] === squares[c]
+      ) {
+        return squares[a];
       }
     }
 
@@ -101,6 +125,7 @@ function CustomBoard() {
       },
     ]);
 
+    //check winner show Winner or Draw
     const winner = calculateWinner(newBoard, size);
     if (winner) {
       setShowModal(true);
@@ -163,12 +188,12 @@ function CustomBoard() {
       <div className="status text-lg font-bold select-none text-white bg-slate-800 p-5 rounded-lg">
         {status}
       </div>
-      <div className="score fixed right-5 m-5 select-none top-0">
-        <p className=" p-3 rounded-xl bg-red-800 mb-2 text-white">
-          Player X : <strong>{scores.X}</strong>
+      <div className="flex justify-center select-none mb-2 gap-x-3 ">
+        <p className=" p-3  border-b-2 border-red-800  text-red-800">
+          X : <strong>{scores.X}</strong>
         </p>
-        <p className=" p-3 rounded-xl bg-green-800  text-white">
-          Player O : <strong>{scores.O}</strong>
+        <p className=" p-3 border-b-2 border-green-800  text-green-800">
+          O : <strong>{scores.O}</strong>
         </p>
       </div>
 
