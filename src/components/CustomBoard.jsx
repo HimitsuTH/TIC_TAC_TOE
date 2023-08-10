@@ -14,6 +14,8 @@ function CustomBoard() {
   const [history, setHistory] = useState([]);
   const [showHistory, setShowHistory] = useState(false);
 
+  const [lineWin, setLineWin] = useState("");
+
   const [inputSize, setInputSize] = useState("");
   const [size, setSize] = useState(3);
 
@@ -23,7 +25,7 @@ function CustomBoard() {
   };
 
   //Board
-  const [board, setBoard] = useState(Array(size*size).fill(null));
+  const [board, setBoard] = useState(Array(size * size).fill(null));
   // console.log(size*size)
   // console.log(board)
   //Score
@@ -92,7 +94,7 @@ function CustomBoard() {
       }
     }
     // console.log(lines);
-
+  
     // Check for a winner in each line
     for (const line of lines) {
       const [a, b, c] = line;
@@ -101,16 +103,22 @@ function CustomBoard() {
         squares[a] === squares[b] &&
         squares[a] === squares[c]
       ) {
-        return squares[a];
+        // console.log(`A ${a + 1} , B ${b + 1} , C ${c+1}`)
+
+        return {
+          winner: squares[a],
+          lineWin: `${a + 1} : ${b + 1} : ${c+1}`
+        };
       }
     }
 
+    
     return null;
   }
 
   // handle when user click Square
   const handleClick = (index) => {
-    if (board[index] || calculateWinner(board, size)) {
+    if (board[index] || calculateWinner(board, size)?.winner) {
       return;
     }
 
@@ -128,23 +136,32 @@ function CustomBoard() {
       },
     ]);
 
-    //check winner 
+    //check winner
     //If win determines the winner's score., else if Check all index board sizes are not null. = "Draw"
-    const winner = calculateWinner(newBoard, size);
+    const winner = calculateWinner(newBoard, size)?.winner;
     if (winner) {
+      const lineWin_ = calculateWinner(newBoard, size)?.lineWin
+      // console.log(lineWin_)
+      setLineWin(lineWin_)
+
+      
       setShowModal(true);
       setShowHistory(false);
+
+      //set Score
       const newScores = { ...scores };
       newScores[winner] += 1;
       setScores(newScores);
       localStorage.setItem("ticTacToeScores", JSON.stringify(newScores));
     } else if (history.length + 1 === size * size) {
       setShowModal(true);
+      setLineWin("")
     }
   };
 
   // get winner
-  const winner = calculateWinner(board, size);
+  const winner = calculateWinner(board, size)?.winner;
+  // console.log(winner)
   // status game
   const status = winner
     ? `Winner: ${winner}`
@@ -169,6 +186,7 @@ function CustomBoard() {
     setXIsNext(true);
     setScores({ X: 0, O: 0 });
     setHistory([]);
+    setLineWin("");
     localStorage.removeItem("ticTacToeScores");
   };
 
@@ -177,6 +195,7 @@ function CustomBoard() {
     setBoard(Array(size).fill(null));
     setXIsNext(true);
     setHistory([]);
+    setLineWin("")
   };
 
   //Close Modal Alert Winner Or Draw
@@ -188,7 +207,12 @@ function CustomBoard() {
   return (
     <div className="flex flex-col justify-center items-center h-auto mt-3 md:mt-0">
       {showModal && (
-        <Modal closeModal={closeModal} winner={winner ? winner : "Draw"} history={history} />
+        <Modal
+          closeModal={closeModal}
+          winner={winner ? winner : "Draw"}
+          history={history}
+          lineWin={lineWin}
+        />
       )}
       <div className="status text-md font-bold select-none text-white bg-slate-800 p-3 md:p-5 rounded-lg md:text-lg">
         {status}
@@ -259,9 +283,7 @@ function CustomBoard() {
           </button>
         </div>
       </main>
-      {showHistory && (
-       <HistoryBoard history={history}/>
-      )}
+      {showHistory && <HistoryBoard history={history} />}
     </div>
   );
 }

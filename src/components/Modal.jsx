@@ -1,7 +1,8 @@
+/* eslint-disable no-unused-vars */
 // import React from "react";
 
-export default function Modal({ closeModal, winner, history }) {
-  // console.log(winner)
+export default function Modal({ closeModal, winner, history, lineWin }) {
+  // console.log(winCondition)
   return (
     <>
       <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
@@ -10,7 +11,7 @@ export default function Modal({ closeModal, winner, history }) {
           <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
             {/*body*/}
             <div className="relative p-6 flex-auto">
-              <p className="my-4 text-slate-800 text-lg leading-relaxed font-medium md:text-xl">
+              <p className="my-4 text-slate-800 text-lg leading-relaxed font-medium md:text-xl select-none">
                 {winner === "Draw" ? `${winner}` : `Winner ${winner}`}
               </p>
               <div className="">
@@ -28,6 +29,7 @@ export default function Modal({ closeModal, winner, history }) {
                     </ol>
                   ))}
                 </ul>
+                <p className=" mt-2"> {lineWin ? `Line win = ${lineWin}` : ""}</p>
               </div>
             </div>
 
@@ -37,7 +39,6 @@ export default function Modal({ closeModal, winner, history }) {
                 className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                 type="button"
                 onClick={() => {
-                  // handleNewGame()
                   closeModal();
                 }}
               >
