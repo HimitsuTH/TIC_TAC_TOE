@@ -1,7 +1,13 @@
 /* eslint-disable no-unused-vars */
 // import React from "react";
 
-export default function Modal({ closeModal, winner, history, lineWin }) {
+export default function Modal({
+  closeModal,
+  winner,
+  history,
+  lineWin,
+  indexLine,
+}) {
   // console.log(winCondition)
   return (
     <>
@@ -15,11 +21,17 @@ export default function Modal({ closeModal, winner, history, lineWin }) {
                 {winner === "Draw" ? `${winner}` : `Winner ${winner}`}
               </p>
               <div className="">
-                <ul className="history flex flex-col overflow-y-scroll h-32 w-52 md:w-72 scroll shadow-md gap-y-2 md:h-56">
+                <ul className="history flex flex-col overflow-y-scroll h-32 w-52 md:w-72 scroll shadow-md gap-y-2 md:h-48">
                   {history.map((h, i) => (
                     <ol
                       key={i}
-                      className="flex gap-3 bg-slate-600 text-white items-center text-xs md:text-base border mx-2 p-2 "
+                      className={`flex gap-3  text-white items-center text-xs md:text-base border mx-2 p-2 ${
+                        indexLine[0] == h?.move - 1 ||
+                        indexLine[1] == h?.move - 1 ||
+                        indexLine[2] == h?.move - 1
+                          ? "bg-green-800"
+                          : "bg-slate-600"
+                      }`}
                     >
                       <p>Turn : {i + 1}</p>
                       <div className="flex gap-x-2">
@@ -29,14 +41,17 @@ export default function Modal({ closeModal, winner, history, lineWin }) {
                     </ol>
                   ))}
                 </ul>
-                <p className=" mt-2"> {lineWin ? `Line win = ${lineWin}` : ""}</p>
+                <p className=" mt-2">
+                  {" "}
+                  {lineWin ? `Line win = ${lineWin}` : ""}
+                </p>
               </div>
             </div>
 
             {/*footer*/}
             <div className="flex items-center justify-center p-6 border-t border-solid border-slate-200 rounded-b">
               <button
-                className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                className="bg-emerald-500 text-white active:bg-emerald-700 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg hover:bg-emerald-600 outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                 type="button"
                 onClick={() => {
                   closeModal();

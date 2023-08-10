@@ -15,6 +15,7 @@ function CustomBoard() {
   const [showHistory, setShowHistory] = useState(false);
 
   const [lineWin, setLineWin] = useState("");
+  const [indexLine, setIndexLine] = useState([]);
 
   const [inputSize, setInputSize] = useState("");
   const [size, setSize] = useState(3);
@@ -94,25 +95,26 @@ function CustomBoard() {
       }
     }
     // console.log(lines);
-  
+
     // Check for a winner in each line
     for (const line of lines) {
-      const [a, b, c] = line;
+      const [a, b, c] = line.sort();
       if (
         squares[a] &&
         squares[a] === squares[b] &&
         squares[a] === squares[c]
       ) {
         // console.log(`A ${a + 1} , B ${b + 1} , C ${c+1}`)
+        // console.log(line)
 
         return {
           winner: squares[a],
-          lineWin: `${a + 1} : ${b + 1} : ${c+1}`
+          lineWin: `${a + 1} : ${b + 1} : ${c + 1}`,
+          lineIndex: [a, b, c],
         };
       }
     }
 
-    
     return null;
   }
 
@@ -140,11 +142,12 @@ function CustomBoard() {
     //If win determines the winner's score., else if Check all index board sizes are not null. = "Draw"
     const winner = calculateWinner(newBoard, size)?.winner;
     if (winner) {
-      const lineWin_ = calculateWinner(newBoard, size)?.lineWin
-      // console.log(lineWin_)
-      setLineWin(lineWin_)
+      const { lineWin, lineIndex } = calculateWinner(newBoard, size);
 
-      
+      setLineWin(lineWin);
+      setIndexLine(lineIndex);
+
+      //set Modal & history
       setShowModal(true);
       setShowHistory(false);
 
@@ -156,7 +159,7 @@ function CustomBoard() {
     } else if (history.length + 1 === size * size) {
       setShowModal(true);
       setShowHistory(false);
-      setLineWin("")
+      setLineWin("");
     }
   };
 
@@ -195,7 +198,8 @@ function CustomBoard() {
     setBoard(Array(size).fill(null));
     setXIsNext(true);
     setHistory([]);
-    setLineWin("")
+    setLineWin("");
+    setIndexLine([]);
   };
 
   //Close Modal Alert Winner Or Draw
@@ -212,6 +216,7 @@ function CustomBoard() {
           winner={winner ? winner : "Draw"}
           history={history}
           lineWin={lineWin}
+          indexLine={indexLine}
         />
       )}
       <div className="status text-md font-bold select-none text-white bg-slate-800 p-3 md:p-5 rounded-lg md:text-lg">
@@ -283,7 +288,7 @@ function CustomBoard() {
           </button>
         </div>
       </main>
-      {showHistory && <HistoryBoard history={history} />}
+      {showHistory && <HistoryBoard history={history}  />}
     </div>
   );
 }
