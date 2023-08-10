@@ -94,3 +94,8 @@ p:hover {
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
+
+.square.X.active , .square.O.active {
+  background-color: 	#424549;
+  color: white;
+}

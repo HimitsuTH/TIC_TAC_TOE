@@ -1,7 +1,10 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Modal from "./Modal";
 import HistoryBoard from "./HistoryBoard";
+import SelectedPlayer from "./SelectedPlayer";
+import Status from "./Status";
 
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
@@ -11,30 +14,43 @@ import Select from "@mui/material/Select";
 // console.log(calculateWinner)
 
 function CustomBoard() {
+  const [inputSize, setInputSize] = useState("");
+  const [size, setSize] = useState(3);
+
+  //Board
+  const [board, setBoard] = useState(Array(size * size).fill(null));
+
+  //=============================
+  //Player default X
+  //=============================
+  const [xIsNext, setXIsNext] = useState(true);
+  const [player, setPlayer] = useState("X");
+  // console.log(xIsNext)
+  const [showSelectPlayer, setShowSelectPlayer] = useState(true);
+
+  //History
   const [history, setHistory] = useState([]);
   const [showHistory, setShowHistory] = useState(false);
 
   const [lineWin, setLineWin] = useState("");
   const [indexLine, setIndexLine] = useState([]);
 
-  const [inputSize, setInputSize] = useState("");
-  const [size, setSize] = useState(3);
-
-  //setInputSize
-  const handleChange = (event) => {
-    setInputSize(event.target.value);
-  };
-
-  //Board
-  const [board, setBoard] = useState(Array(size * size).fill(null));
-  // console.log(size*size)
-  // console.log(board)
   //Score
   const savedScores = JSON.parse(localStorage.getItem("ticTacToeScores"));
   const [scores, setScores] = useState(savedScores || { X: 0, O: 0 });
 
   const [showModal, setShowModal] = useState(false);
-  const [xIsNext, setXIsNext] = useState(true);
+
+  //
+  const handlePlayerFirst = (e) => {
+    setPlayer(e.target.value);
+    setShowSelectPlayer(false);
+  };
+
+  //setInputSize
+  const handleChange = (event) => {
+    setInputSize(event.target.value);
+  };
 
   //handle when user click "Set Board" button❤
   const handleCustomBoard = () => {
@@ -43,7 +59,6 @@ function CustomBoard() {
     } else {
       setSize(inputSize);
       setBoard(Array(size).fill(null));
-      setXIsNext(true);
       setHistory([]);
     }
   };
@@ -119,6 +134,7 @@ function CustomBoard() {
   }
 
   // handle when user click Square
+
   const handleClick = (index) => {
     if (board[index] || calculateWinner(board, size)?.winner) {
       return;
@@ -126,10 +142,17 @@ function CustomBoard() {
 
     const newBoard = board.slice();
 
-    newBoard[index] = xIsNext ? "X" : "O";
-    setBoard(newBoard);
-    setXIsNext(!xIsNext);
+    // console.log(newBoard);
 
+    if (xIsNext) {
+      newBoard[index] = "X";
+    } else {
+      newBoard[index] = "O";
+    }
+
+    // newBoard[index] = xIsNext ? "X" : "O";
+    setBoard(newBoard);
+    setXIsNext((prev) => !prev);
     setHistory((history) => [
       ...history,
       {
@@ -143,6 +166,11 @@ function CustomBoard() {
     const winner = calculateWinner(newBoard, size)?.winner;
     if (winner) {
       const { lineWin, lineIndex } = calculateWinner(newBoard, size);
+      const squares = document.querySelectorAll(".square");
+
+      squares[lineIndex[0]].classList.add("active");
+      squares[lineIndex[1]].classList.add("active");
+      squares[lineIndex[2]].classList.add("active");
 
       setLineWin(lineWin);
       setIndexLine(lineIndex);
@@ -165,9 +193,29 @@ function CustomBoard() {
 
   // get winner
   const winner = calculateWinner(board, size)?.winner;
-  // console.log(winner)
-  // status game
-  const status = `Next player : "${xIsNext ? "X" : "O"}"`;
+
+  //@Reset Board
+  const handleReset = () => {
+    handleNewGame();
+    setScores({ X: 0, O: 0 });
+    setShowSelectPlayer(true);
+    localStorage.removeItem("ticTacToeScores");
+  };
+
+  //New Game "Round -->>>"
+  const handleNewGame = () => {
+    setBoard(Array(size).fill(null));
+    player == "X" ? setXIsNext(true) : setXIsNext(false);
+    setHistory([]);
+    setLineWin("");
+    setIndexLine([]);
+  };
+
+  //Close Modal Alert Winner Or Draw
+  const closeModal = () => {
+    handleNewGame();
+    setShowModal(false);
+  };
 
   //Square
   const renderSquare = (index) => (
@@ -182,34 +230,25 @@ function CustomBoard() {
     </button>
   );
 
-  //@Reset Board
-  const handleReset = () => {
-    // setBoard(Array(size).fill(null));
-    // setXIsNext(true);
-    // setHistory([]);
-    // setLineWin("");
-    handleNewGame();
-    setScores({ X: 0, O: 0 });
-    localStorage.removeItem("ticTacToeScores");
-  };
+  useEffect(() => {
+    player == "X" ? setXIsNext(true) : setXIsNext(false);
+  }, [player]);
 
-  //New Game "Round -->>>"
-  const handleNewGame = () => {
-    setBoard(Array(size).fill(null));
-    setXIsNext(true);
-    setHistory([]);
-    setLineWin("");
-    setIndexLine([]);
-  };
+  useEffect(() => {
+    if (winner) {
+      const squares = document.querySelectorAll(".square");
 
-  //Close Modal Alert Winner Or Draw
-  const closeModal = () => {
-    handleNewGame();
-    setShowModal(false);
-  };
+      squares[indexLine[0]].classList.add("active");
+      squares[indexLine[1]].classList.add("active");
+      squares[indexLine[2]].classList.add("active");
+    }
+  }, [winner]);
 
   return (
     <div className="flex flex-col justify-center items-center h-auto mt-3 md:mt-0">
+      {showSelectPlayer && (
+        <SelectedPlayer handlePlayerFirst={handlePlayerFirst} />
+      )}
       {showModal && (
         <Modal
           closeModal={closeModal}
@@ -219,9 +258,8 @@ function CustomBoard() {
           indexLine={indexLine}
         />
       )}
-      <div className="status text-md font-bold select-none text-white bg-slate-800 p-3 md:p-5 rounded-lg md:text-lg">
-        {status}
-      </div>
+      <Status p={xIsNext} />
+
       <div className="flex justify-center select-none mb-2 gap-x-3 ">
         <p className=" p-3  border-b-2 border-red-800  text-red-800">
           X : <strong>{scores.X}</strong>
@@ -288,7 +326,7 @@ function CustomBoard() {
           </button>
         </div>
       </main>
-      {showHistory && <HistoryBoard history={history}  />}
+      {showHistory && <HistoryBoard history={history} />}
     </div>
   );
 }
