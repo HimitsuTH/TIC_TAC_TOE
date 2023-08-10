@@ -155,6 +155,7 @@ function CustomBoard() {
       localStorage.setItem("ticTacToeScores", JSON.stringify(newScores));
     } else if (history.length + 1 === size * size) {
       setShowModal(true);
+      setShowHistory(false);
       setLineWin("")
     }
   };
