@@ -17,7 +17,7 @@ $ npm run dev
 
 ## :left_speech_bubble:
 
-<div style="display:flex; margin-bottom:5px">
+<div style="display:flex; margin-bottom:5px; justify-content:center; algin-items:center;">
     <img
   src="./public/image1.gif"
   alt="image"
