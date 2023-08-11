@@ -9,7 +9,6 @@ import Status from "./Board/Status";
 import PlayerScore from "./Board/PlayerScore";
 import Modal from "./Board/Modal";
 import HistoryBoard from "./Board/HistoryBoard";
-
 import { Dropdown } from "./ui/dropdown";
 
 function CustomBoard() {
@@ -38,36 +37,30 @@ function CustomBoard() {
   const savedScores = JSON.parse(localStorage.getItem("ticTacToeScores"));
   const [scores, setScores] = useState(savedScores || { X: 0, O: 0 });
 
-  const [showModal, setShowModal] = useState(false);
+  const [showModal, setShowModal] = useState(false); // set show "Modal"
 
   //First player X or O
   const handlePlayerFirst = (e) => {
     setPlayer(e.target.value);
     setShowSelectPlayer(false);
   };
-
   //setInputSize
   const handleChange = (event) => {
     setInputSize(event.target.value);
   };
-
   //history replay
   const handleClickHistory = (h, i) => {
     const squares = document.querySelectorAll(".square");
-
     squares.forEach((square) => square.classList.remove("replay"));
-
     squares[h.move].classList.add("replay");
   };
-
   //handle when user click button "Set Board"❤
   const handleCustomBoard = () => {
-    // console.log(inputSize)
     if (inputSize) {
       setSize(inputSize);
       setBoard(Array(size).fill(null));
       setHistory([]);
-    } 
+    }
     return;
   };
 
@@ -76,7 +69,6 @@ function CustomBoard() {
     if (board[index] || calculateWinner(board, size)?.winner) {
       return;
     }
-
     const newBoard = board.slice();
     const squares = document.querySelectorAll(".square");
     const history_ = document.querySelectorAll(".history_");
@@ -104,16 +96,12 @@ function CustomBoard() {
 
     history_.forEach((h) => h.classList.remove("active"));
 
-    // console.log(history);
-
     //check winner
     //If win determines the winner's score.
     //else if Check all index board sizes are not null. = "Draw".
     const winner = calculateWinner(newBoard, size)?.winner;
     if (winner) {
       const { lineWin, lineIndex } = calculateWinner(newBoard, size);
-      // console.log(lineIndex);
-
       //set index & line win
       setLineWin(lineWin);
       setLinesIndex(lineIndex);
@@ -137,7 +125,7 @@ function CustomBoard() {
   };
 
   // get winner
-  const winner = calculateWinner(board, size)?.winner;
+  const winnerData = calculateWinner(board, size)?.winner;
 
   //@Reset Board
   const handleReset = () => {
@@ -175,23 +163,22 @@ function CustomBoard() {
     </button>
   );
 
-  //select player X OR O
+  //Reset score & update Player when Reload Page
   useEffect(() => {
     player == "X" ? setXIsNext(true) : setXIsNext(false);
     setScores({ X: 0, O: 0 });
     localStorage.removeItem("ticTacToeScores");
-  }, [player]);
+  }, []);
 
   //Active Squares Lines win.
   useEffect(() => {
-    if (winner) {
+    if (winnerData) {
       const squares = document.querySelectorAll(".square");
-
       squares[linesIndex[0]].classList.add("active");
       squares[linesIndex[1]].classList.add("active");
       squares[linesIndex[2]].classList.add("active");
     }
-  }, [winner]);
+  }, [winnerData]);
 
   return (
     <div className="flex flex-col justify-center items-center h-auto mt-3 md:mt-0">
@@ -201,16 +188,14 @@ function CustomBoard() {
       {showModal && (
         <Modal
           closeModal={closeModal}
-          winner={winner ? winner : "Draw"}
+          winner={winnerData ? winnerData : "Draw"}
           history={history}
           lineWin={lineWin}
           linesIndex={linesIndex}
         />
       )}
       <Status p={xIsNext} />
-
       <PlayerScore scores={scores} />
-
       <main className=" flex flex-col justify-center items-center">
         <div className=" container">
           <div className="board">
@@ -308,16 +293,11 @@ function calculateWinner(squares, boardSize) {
       ]);
     }
   }
-  // console.log(lines);
 
   // Check for a winner in each line
   for (const line of lines) {
     const [a, b, c] = line.sort((a, b) => a - b);
-
     if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-      // console.log(`A ${a + 1} , B ${b + 1} , C ${c+1}`)
-      // console.log(line)
-
       return {
         winner: squares[a],
         lineWin: `${a} : ${b} : ${c}`,
@@ -325,6 +305,5 @@ function calculateWinner(squares, boardSize) {
       };
     }
   }
-
   return null;
 }
