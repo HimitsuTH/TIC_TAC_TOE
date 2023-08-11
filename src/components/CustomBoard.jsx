@@ -71,18 +71,18 @@ function CustomBoard() {
 
     const newBoard = board.slice();
 
-    if (xIsNext) {
-      newBoard[index] = "X";
-    } else {
-      newBoard[index] = "O";
-    }
+    // if (xIsNext) {
+    //   newBoard[index] = "X";
+    // } else {
+    //   newBoard[index] = "O";
+    // }
+    newBoard[index] = xIsNext ? "X" : "O";
 
     const col = Math.floor(index % size),
       row = Math.floor(index / size),
       //col and row where the latest click happened
       clickPosition = "(row:" + row + ", col:" + col + ")";
 
-    // newBoard[index] = xIsNext ? "X" : "O";
     setBoard(newBoard);
     setXIsNext((prev) => !prev);
     setHistory((history) => [
