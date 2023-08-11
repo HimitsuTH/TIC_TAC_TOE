@@ -11,7 +11,7 @@ export default function Modal({
   // console.log(winCondition)
   return (
     <>
-      <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed right-8 lg:right-14 z-50 outline-none focus:outline-none">
+      <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed lg:right-14 z-50 outline-none focus:outline-none">
         <div className="relative w-full  my-6 mx-auto max-w-screen flex justify-around">
           {/*content*/}
 
