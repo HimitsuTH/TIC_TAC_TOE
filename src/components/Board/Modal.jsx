@@ -29,9 +29,9 @@ export default function Modal({
                       <ol
                         key={i}
                         className={`flex gap-3  text-white items-center text-xs md:text-sm border mx-2 p-2 ${
-                          linesIndex[0] == h?.move - 1 ||
-                          linesIndex[1] == h?.move - 1 ||
-                          linesIndex[2] == h?.move - 1
+                          linesIndex[0] == h?.move ||
+                          linesIndex[1] == h?.move ||
+                          linesIndex[2] == h?.move 
                             ? "bg-slate-800"
                             : "bg-slate-600"
                         }`}

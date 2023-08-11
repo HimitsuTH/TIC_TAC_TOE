@@ -51,6 +51,15 @@ function CustomBoard() {
     setInputSize(event.target.value);
   };
 
+  //history replay
+  const handleClickHistory = (h, i) => {
+    const squares = document.querySelectorAll(".square");
+
+    squares.forEach((square) => square.classList.remove("replay"));
+
+    squares[h.move].classList.add("replay");
+  };
+
   //handle when user click button "Set Board"❤
   const handleCustomBoard = () => {
     // console.log(inputSize)
@@ -70,6 +79,12 @@ function CustomBoard() {
     }
 
     const newBoard = board.slice();
+    const squares = document.querySelectorAll(".square");
+    const history_ = document.querySelectorAll(".history_");
+
+    squares.forEach((square) => square.classList.remove("replay"));
+
+    // console.log(newBoard)
 
     // if (xIsNext) {
     //   newBoard[index] = "X";
@@ -89,10 +104,15 @@ function CustomBoard() {
       ...history,
       {
         player: newBoard[index],
-        move: index + 1,
+        move: index,
         position: clickPosition,
+        boardHistory: newBoard,
       },
     ]);
+
+    history_.forEach((h) => h.classList.remove("active"));
+
+    // console.log(history);
 
     //check winner
     //If win determines the winner's score.
@@ -170,6 +190,7 @@ function CustomBoard() {
     localStorage.removeItem("ticTacToeScores");
   }, [player]);
 
+
   //Active Squares Lines win.
   useEffect(() => {
     if (winner) {
@@ -239,7 +260,12 @@ function CustomBoard() {
           </button>
         </div>
       </main>
-      {showHistory && <HistoryBoard history={history} />}
+      {showHistory && (
+        <HistoryBoard
+          history={history}
+          handleClickHistory={handleClickHistory}
+        />
+      )}
     </div>
   );
 }
