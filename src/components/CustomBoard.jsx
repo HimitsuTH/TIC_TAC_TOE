@@ -63,13 +63,12 @@ function CustomBoard() {
   //handle when user click button "Set Board"❤
   const handleCustomBoard = () => {
     // console.log(inputSize)
-    if (inputSize < 3) {
-      return;
-    } else {
+    if (inputSize) {
       setSize(inputSize);
       setBoard(Array(size).fill(null));
       setHistory([]);
-    }
+    } 
+    return;
   };
 
   // handle when user click Square
