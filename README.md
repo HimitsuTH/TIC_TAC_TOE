@@ -10,20 +10,20 @@ $ cd TIC_TAC_TOE
 # Install dependencies
 $ npm install
 
-# Run 
+# Run
 $ npm run dev
 
 ```
 
 ## :left_speech_bubble:
 
-<div style="display:flex; margin-bottom:5px; justify-content:center; algin-items:center;">
+<p align="center" style="margin-bottom:5px; ">
     <img
   src="./public/image1.gif"
   alt="image"
   title="image coding"
   style="display: inline-block; margin: 0 auto; max-width: 300px">
-</div>
+</p>
 
 <p> <strong style=" margin-left:5px">สวัสดีครับ</strong>  Project นี้เป็นการสร้างเกม Tic Tac Toe หรือ XO. โดยในเกมผู้เล่นสามารถกำหนดขนาดของ board ได้<br> ปล. มีให้เลือก 3-6.ผู้เล่นสามารถเลือกได้ว่า X หรือ O จะได้เริ่มก่อน. 
 </p>
@@ -31,4 +31,5 @@ $ npm run dev
 ตัวเกมสามารถดู history การเดินในแต่ละตาของผู้เล่น.</p>
 
 ## :link: Tic Tac Toe Game
- <a  href="https://xo-practice.netlify.app/" target="_blank" rel="noreferrer"> Click here</a> to play game.
+
+<a  href="https://xo-practice.netlify.app/" target="_blank" rel="noreferrer"> Click here</a> to play game.
