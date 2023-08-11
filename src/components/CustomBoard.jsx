@@ -53,7 +53,7 @@ function CustomBoard() {
 
   //handle when user click button "Set Board"❤
   const handleCustomBoard = () => {
-    console.log(inputSize)
+    // console.log(inputSize)
     if (inputSize < 3) {
       return;
     } else {
@@ -63,77 +63,6 @@ function CustomBoard() {
     }
   };
 
-  function calculateWinner(squares, boardSize) {
-    const lines = [];
-
-    // Generate winning combinations for rows
-    for (let row = 0; row < boardSize; row++) {
-      for (let col = 0; col <= boardSize - 3; col++) {
-        lines.push([
-          row * boardSize + col,
-          row * boardSize + col + 1,
-          row * boardSize + col + 2,
-        ]);
-      }
-    }
-
-    // Generate winning combinations for columns
-    for (let col = 0; col < boardSize; col++) {
-      for (let row = 0; row <= boardSize - 3; row++) {
-        lines.push([
-          row * boardSize + col,
-          (row + 1) * boardSize + col,
-          (row + 2) * boardSize + col,
-        ]);
-      }
-    }
-
-    // Generate winning combinations for diagonals (top-left to bottom-right)
-    for (let row = 0; row <= boardSize - 3; row++) {
-      for (let col = 0; col <= boardSize - 3; col++) {
-        lines.push([
-          row * boardSize + col,
-          (row + 1) * boardSize + col + 1,
-          (row + 2) * boardSize + col + 2,
-        ]);
-      }
-    }
-
-    // Generate winning combinations for diagonals (bottom-left to top-right)
-    for (let row = 2; row < boardSize; row++) {
-      for (let col = 0; col <= boardSize - 3; col++) {
-        lines.push([
-          row * boardSize + col,
-          (row - 1) * boardSize + col + 1,
-          (row - 2) * boardSize + col + 2,
-        ]);
-      }
-    }
-    // console.log(lines);
-
-    // Check for a winner in each line
-    for (const line of lines) {
-      const [a, b, c] = line.sort((a, b) => a - b);
-
-      if (
-        squares[a] &&
-        squares[a] === squares[b] &&
-        squares[a] === squares[c]
-      ) {
-        // console.log(`A ${a + 1} , B ${b + 1} , C ${c+1}`)
-        // console.log(line)
-
-        return {
-          winner: squares[a],
-          lineWin: `${a + 1} : ${b + 1} : ${c + 1}`,
-          lineIndex: [a, b, c],
-        };
-      }
-    }
-
-    return null;
-  }
-
   // handle when user click Square
   const handleClick = (index) => {
     if (board[index] || calculateWinner(board, size)?.winner) {
@@ -142,13 +71,16 @@ function CustomBoard() {
 
     const newBoard = board.slice();
 
-    // console.log(newBoard);
-
     if (xIsNext) {
       newBoard[index] = "X";
     } else {
       newBoard[index] = "O";
     }
+
+    const col = Math.floor(index % size),
+      row = Math.floor(index / size),
+      //col and row where the latest click happened
+      clickPosition = "(row:" + row + ", col:" + col + ")";
 
     // newBoard[index] = xIsNext ? "X" : "O";
     setBoard(newBoard);
@@ -158,6 +90,7 @@ function CustomBoard() {
       {
         player: newBoard[index],
         move: index + 1,
+        position: clickPosition,
       },
     ]);
 
@@ -237,7 +170,6 @@ function CustomBoard() {
     localStorage.removeItem("ticTacToeScores");
   }, [player]);
 
-
   //Active Squares Lines win.
   useEffect(() => {
     if (winner) {
@@ -313,3 +245,69 @@ function CustomBoard() {
 }
 
 export default CustomBoard;
+
+function calculateWinner(squares, boardSize) {
+  const lines = [];
+  // Generate winning combinations for rows
+  for (let row = 0; row < boardSize; row++) {
+    for (let col = 0; col <= boardSize - 3; col++) {
+      lines.push([
+        row * boardSize + col,
+        row * boardSize + col + 1,
+        row * boardSize + col + 2,
+      ]);
+    }
+  }
+
+  // Generate winning combinations for columns
+  for (let col = 0; col < boardSize; col++) {
+    for (let row = 0; row <= boardSize - 3; row++) {
+      lines.push([
+        row * boardSize + col,
+        (row + 1) * boardSize + col,
+        (row + 2) * boardSize + col,
+      ]);
+    }
+  }
+
+  // Generate winning combinations for diagonals (top-left to bottom-right)
+  for (let row = 0; row <= boardSize - 3; row++) {
+    for (let col = 0; col <= boardSize - 3; col++) {
+      lines.push([
+        row * boardSize + col,
+        (row + 1) * boardSize + col + 1,
+        (row + 2) * boardSize + col + 2,
+      ]);
+    }
+  }
+
+  // Generate winning combinations for diagonals (bottom-left to top-right)
+  for (let row = 2; row < boardSize; row++) {
+    for (let col = 0; col <= boardSize - 3; col++) {
+      lines.push([
+        row * boardSize + col,
+        (row - 1) * boardSize + col + 1,
+        (row - 2) * boardSize + col + 2,
+      ]);
+    }
+  }
+  // console.log(lines);
+
+  // Check for a winner in each line
+  for (const line of lines) {
+    const [a, b, c] = line.sort((a, b) => a - b);
+
+    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+      // console.log(`A ${a + 1} , B ${b + 1} , C ${c+1}`)
+      // console.log(line)
+
+      return {
+        winner: squares[a],
+        lineWin: `${a} : ${b} : ${c}`,
+        lineIndex: [a, b, c],
+      };
+    }
+  }
+
+  return null;
+}

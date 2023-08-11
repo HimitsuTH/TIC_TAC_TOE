@@ -23,11 +23,11 @@ export default function Modal({
                   {winner === "Draw" ? `${winner}` : `Winner ${winner}`}
                 </p>
                 <div className=" text-center">
-                  <ul className=" flex flex-col overflow-y-scroll h-32 w-52 md:w-72 scroll  gap-y-2 md:h-48">
+                  <ul className=" flex flex-col overflow-y-scroll h-32 w-auto md:w-80 scroll  gap-y-2 md:h-48">
                     {history.map((h, i) => (
                       <ol
                         key={i}
-                        className={`flex gap-3  text-white items-center text-xs md:text-base border mx-2 p-2 ${
+                        className={`flex gap-3  text-white items-center text-xs md:text-sm border mx-2 p-2 ${
                           linesIndex[0] == h?.move - 1 ||
                           linesIndex[1] == h?.move - 1 ||
                           linesIndex[2] == h?.move - 1
@@ -37,8 +37,8 @@ export default function Modal({
                       >
                         <p>Turn: {i + 1}</p>
                         <div className="flex gap-x-2">
-                          <p>Player: {h?.player}</p>
-                          <p>move: {h?.move}</p>
+                          <p>{`"${h?.player}" `}</p>
+                          <p>{h?.position}</p>
                         </div>
                       </ol>
                     ))}
