@@ -1,4 +1,4 @@
-const PlayerScore = ({scores}) => {
+const PlayerScore = ({ scores }) => {
   return (
     <>
       <div className="flex justify-center select-none mb-2 gap-x-3 ">

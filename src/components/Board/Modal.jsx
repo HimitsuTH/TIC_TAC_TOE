@@ -24,14 +24,19 @@ export default function Modal({
                 </p>
                 <div className=" text-center">
                   <ul className=" flex flex-col overflow-y-scroll h-32 w-auto md:w-80 scroll  gap-y-2 md:h-48">
-                  <ol key="start" className="flex gap-3  text-white justify-center items-center text-xs md:text-sm border mx-2 p-2 bg-blue-700">Game start</ol>
+                    <ol
+                      key="start"
+                      className="flex gap-3  text-white justify-center items-center text-xs md:text-sm border mx-2 p-2 bg-blue-700"
+                    >
+                      Game start
+                    </ol>
                     {history.map((h, i) => (
                       <ol
                         key={i}
                         className={`flex gap-3  text-white items-center text-xs md:text-sm border mx-2 p-2 ${
                           linesIndex[0] == h?.move ||
                           linesIndex[1] == h?.move ||
-                          linesIndex[2] == h?.move 
+                          linesIndex[2] == h?.move
                             ? "bg-slate-800"
                             : "bg-slate-600"
                         }`}

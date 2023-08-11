@@ -40,7 +40,7 @@ function CustomBoard() {
 
   const [showModal, setShowModal] = useState(false);
 
-  //
+  //First player X or O
   const handlePlayerFirst = (e) => {
     setPlayer(e.target.value);
     setShowSelectPlayer(false);
@@ -84,13 +84,6 @@ function CustomBoard() {
 
     squares.forEach((square) => square.classList.remove("replay"));
 
-    // console.log(newBoard)
-
-    // if (xIsNext) {
-    //   newBoard[index] = "X";
-    // } else {
-    //   newBoard[index] = "O";
-    // }
     newBoard[index] = xIsNext ? "X" : "O";
 
     const col = Math.floor(index % size),
@@ -170,7 +163,7 @@ function CustomBoard() {
     setShowModal(false);
   };
 
-  //Square
+  //Squares
   const renderSquare = (index) => (
     <button
       className={`square ${
@@ -189,7 +182,6 @@ function CustomBoard() {
     setScores({ X: 0, O: 0 });
     localStorage.removeItem("ticTacToeScores");
   }, [player]);
-
 
   //Active Squares Lines win.
   useEffect(() => {
