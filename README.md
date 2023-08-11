@@ -17,7 +17,15 @@ $ npm run dev
 
 ## :left_speech_bubble:
 
-<p> <strong style=" margin-left:5px">สวัสดีครับ</strong>  Project นี้เป็นการสร้างเกม Tic Tac Toe หรือ XO. โดยในเกมผู้เล่นสามารถกำหนดขนาดของ board ได้ ปล. มีให้เลือก 3-6.ผู้เล่นสามารถเลือกได้ว่า X หรือ O จะได้เริ่มก่อน. 
+<div style="display:flex; margin-bottom:5px">
+    <img
+  src="./public/image1.gif"
+  alt="image"
+  title="image coding"
+  style="display: inline-block; margin: 0 auto; max-width: 300px">
+</div>
+
+<p> <strong style=" margin-left:5px">สวัสดีครับ</strong>  Project นี้เป็นการสร้างเกม Tic Tac Toe หรือ XO. โดยในเกมผู้เล่นสามารถกำหนดขนาดของ board ได้<br> ปล. มีให้เลือก 3-6.ผู้เล่นสามารถเลือกได้ว่า X หรือ O จะได้เริ่มก่อน. 
 </p>
 <p>หลักการชนะ ผู้เล่นฝ่ายใดฝ่ายหนึ่ง มี แถวแนวตั้ง,แนวนอน,หรือแนวเฉียง เรียงกันครบ 3 ก่อน โดยผู้เล่นที่ชนะจะได้ 1 แต้ม. หรือถ้าเล่นจน board เต็มแล้ว ตัวเกมจะมีการแจ้งเตือนว่า ``เสมอ`` และในรอบนั้นทั้งสองฝ่ายจะไม่ได้คะแนน.  
 ตัวเกมสามารถดู history การเดินในแต่ละตาของผู้เล่น.</p>
