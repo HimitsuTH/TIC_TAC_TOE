@@ -1,3 +1,7 @@
+## Tic tac toe
+
+Tic tac toe built with React hooks, Tailwind css, Mui, ViteJS
+
 ## Setup
 
 ```
@@ -15,7 +19,7 @@ $ npm run dev
 
 ```
 
-## :left_speech_bubble:
+## :left_speech_bubble: Contents
 
 <p align="center" style="margin-bottom:5px; ">
     <img
