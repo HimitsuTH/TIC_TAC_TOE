@@ -5,7 +5,7 @@ import GitHubIcon from "@mui/icons-material/GitHub";
 
 function App() {
   return (
-    <div className="App h-auto md:h-screen">
+    <div className="App h-auto md:h-screen font-mono">
       <CustomBoard />
       <div className=" fixed top-0 right-0 m-5 hover:scale-125 transition-all">
         <a

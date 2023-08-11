@@ -3,7 +3,7 @@ import React, { useState } from "react";
 
 const Status = ({ p }) => {
   // status game
-  const status = `Next player : "${p ? "X" : "O"}"`;
+  const status = <p>{`Next player : "${p ? "X" : "O"}"`}</p>;
 
 //   console.log(status)
   return (

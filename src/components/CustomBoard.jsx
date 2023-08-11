@@ -1,17 +1,16 @@
+/* eslint-disable react/no-unknown-property */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 import { useState, useEffect } from "react";
-import Modal from "./Modal";
-import HistoryBoard from "./HistoryBoard";
-import SelectedPlayer from "./SelectedPlayer";
-import Status from "./Status";
 
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
+//Components
+import SelectedPlayer from "./Board/SelectedPlayer";
+import Status from "./Board/Status";
+import PlayerScore from "./Board/PlayerScore";
+import Modal from "./Board/Modal";
+import HistoryBoard from "./Board/HistoryBoard";
 
-// console.log(calculateWinner)
+import { Dropdown } from "./ui/dropdown";
 
 function CustomBoard() {
   const [inputSize, setInputSize] = useState("");
@@ -33,7 +32,7 @@ function CustomBoard() {
   const [showHistory, setShowHistory] = useState(false);
 
   const [lineWin, setLineWin] = useState("");
-  const [indexLine, setIndexLine] = useState([]);
+  const [linesIndex, setLinesIndex] = useState([]);
 
   //Score
   const savedScores = JSON.parse(localStorage.getItem("ticTacToeScores"));
@@ -52,8 +51,9 @@ function CustomBoard() {
     setInputSize(event.target.value);
   };
 
-  //handle when user click "Set Board" button❤
+  //handle when user click button "Set Board"❤
   const handleCustomBoard = () => {
+    console.log(inputSize)
     if (inputSize < 3) {
       return;
     } else {
@@ -113,7 +113,8 @@ function CustomBoard() {
 
     // Check for a winner in each line
     for (const line of lines) {
-      const [a, b, c] = line.sort();
+      const [a, b, c] = line.sort((a, b) => a - b);
+
       if (
         squares[a] &&
         squares[a] === squares[b] &&
@@ -134,7 +135,6 @@ function CustomBoard() {
   }
 
   // handle when user click Square
-
   const handleClick = (index) => {
     if (board[index] || calculateWinner(board, size)?.winner) {
       return;
@@ -162,28 +162,28 @@ function CustomBoard() {
     ]);
 
     //check winner
-    //If win determines the winner's score., else if Check all index board sizes are not null. = "Draw"
+    //If win determines the winner's score.
+    //else if Check all index board sizes are not null. = "Draw".
     const winner = calculateWinner(newBoard, size)?.winner;
     if (winner) {
       const { lineWin, lineIndex } = calculateWinner(newBoard, size);
-      const squares = document.querySelectorAll(".square");
+      // console.log(lineIndex);
 
-      squares[lineIndex[0]].classList.add("active");
-      squares[lineIndex[1]].classList.add("active");
-      squares[lineIndex[2]].classList.add("active");
-
+      //set index & line win
       setLineWin(lineWin);
-      setIndexLine(lineIndex);
+      setLinesIndex(lineIndex);
 
       //set Modal & history
       setShowModal(true);
       setShowHistory(false);
 
-      //set Score
+      //update score winner.
       const newScores = { ...scores };
       newScores[winner] += 1;
       setScores(newScores);
       localStorage.setItem("ticTacToeScores", JSON.stringify(newScores));
+
+      //check Draw if board is full.
     } else if (history.length + 1 === size * size) {
       setShowModal(true);
       setShowHistory(false);
@@ -197,8 +197,8 @@ function CustomBoard() {
   //@Reset Board
   const handleReset = () => {
     handleNewGame();
-    setScores({ X: 0, O: 0 });
     setShowSelectPlayer(true);
+    setScores({ X: 0, O: 0 });
     localStorage.removeItem("ticTacToeScores");
   };
 
@@ -208,7 +208,7 @@ function CustomBoard() {
     player == "X" ? setXIsNext(true) : setXIsNext(false);
     setHistory([]);
     setLineWin("");
-    setIndexLine([]);
+    setLinesIndex([]);
   };
 
   //Close Modal Alert Winner Or Draw
@@ -230,17 +230,22 @@ function CustomBoard() {
     </button>
   );
 
+  //select player X OR O
   useEffect(() => {
     player == "X" ? setXIsNext(true) : setXIsNext(false);
+    setScores({ X: 0, O: 0 });
+    localStorage.removeItem("ticTacToeScores");
   }, [player]);
 
+
+  //Active Squares Lines win.
   useEffect(() => {
     if (winner) {
       const squares = document.querySelectorAll(".square");
 
-      squares[indexLine[0]].classList.add("active");
-      squares[indexLine[1]].classList.add("active");
-      squares[indexLine[2]].classList.add("active");
+      squares[linesIndex[0]].classList.add("active");
+      squares[linesIndex[1]].classList.add("active");
+      squares[linesIndex[2]].classList.add("active");
     }
   }, [winner]);
 
@@ -255,19 +260,12 @@ function CustomBoard() {
           winner={winner ? winner : "Draw"}
           history={history}
           lineWin={lineWin}
-          indexLine={indexLine}
+          linesIndex={linesIndex}
         />
       )}
       <Status p={xIsNext} />
 
-      <div className="flex justify-center select-none mb-2 gap-x-3 ">
-        <p className=" p-3  border-b-2 border-red-800  text-red-800">
-          X : <strong>{scores.X}</strong>
-        </p>
-        <p className=" p-3 border-b-2 border-green-800  text-green-800">
-          O : <strong>{scores.O}</strong>
-        </p>
-      </div>
+      <PlayerScore scores={scores} />
 
       <main className=" flex flex-col justify-center items-center">
         <div className=" container">
@@ -283,24 +281,7 @@ function CustomBoard() {
               ))}
           </div>
           <div className=" flex gap-x-5  p-1 items-center text-xs md:text-base justify-center">
-            <FormControl sx={{ m: 1, minWidth: 120 }}>
-              <InputLabel id="demo-simple-select-helper-label">Size</InputLabel>
-              <Select
-                labelId="demo-simple-select-helper-label"
-                id="demo-simple-select-helper"
-                value={inputSize}
-                label="Size"
-                onChange={handleChange}
-              >
-                <MenuItem value="">
-                  <em>None</em>
-                </MenuItem>
-                <MenuItem value={3}>3</MenuItem>
-                <MenuItem value={4}>4</MenuItem>
-                <MenuItem value={5}>5</MenuItem>
-                <MenuItem value={6}>6</MenuItem>
-              </Select>
-            </FormControl>
+            <Dropdown inputSize={inputSize} handleChange={handleChange} />
             <button
               onClick={handleCustomBoard}
               className=" bg-blue-600 p-2 rounded-xl text-white hover:bg-blue-700 hover:shadow-blue-400 shadow-md "

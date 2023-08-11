@@ -28,14 +28,9 @@
 
 @media ( min-width: 600px){
   .square {
-    width: 64px;
-    height: 64px;
+    width: 58px;
+    height: 58px;
     font-size: 24px;
-    border: 1px solid #ccc;
-    margin: -1px 0 0 -1px;
-    margin: 2px;
-    background: #fff;
-    cursor: pointer;
   }
 }
 
