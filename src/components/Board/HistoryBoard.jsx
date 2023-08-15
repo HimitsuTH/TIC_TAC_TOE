@@ -4,7 +4,7 @@ const HistoryBoard = ({ history, handleClickHistory }) => {
   const [active, setActive] = useState(null);
 
   return (
-    <div className=" md:fixed lg:right-14 md:z-20 md:top-48 mt-4 md:mt-0">
+    <div className=" lg:fixed lg:right-14 lg:z-20 lg:top-48 mt-4 md:mt-0">
       <p className=" font-bold select-none">History Board</p>
       <ul className="history flex flex-col overflow-y-scroll h-32  w-72 md:w-80 scroll shadow-md gap-y-2 md:h-56">
         <ol
