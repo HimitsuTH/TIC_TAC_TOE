@@ -168,7 +168,7 @@ function CustomBoard() {
     player == "X" ? setXIsNext(true) : setXIsNext(false);
     setScores({ X: 0, O: 0 });
     localStorage.removeItem("ticTacToeScores");
-  }, []);
+  }, [player]);
 
   //Active Squares Lines win.
   useEffect(() => {
