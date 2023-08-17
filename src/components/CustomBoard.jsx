@@ -12,10 +12,11 @@ import HistoryBoard from "./Board/HistoryBoard";
 import { Dropdown } from "./ui/dropdown";
 
 function CustomBoard() {
+  //Size & inputSize of board.
   const [inputSize, setInputSize] = useState("");
   const [size, setSize] = useState(3);
 
-  //Board
+  //Board []
   const [board, setBoard] = useState(Array(size * size).fill(null));
 
   //=============================
@@ -30,6 +31,7 @@ function CustomBoard() {
   const [history, setHistory] = useState([]);
   const [showHistory, setShowHistory] = useState(false);
 
+  //line & index of wining
   const [lineWin, setLineWin] = useState("");
   const [linesIndex, setLinesIndex] = useState([]);
 
@@ -69,7 +71,8 @@ function CustomBoard() {
     if (board[index] || calculateWinner(board, size)?.winner) {
       return;
     }
-    const newBoard = board.slice();
+    const newBoard = board;
+
     const squares = document.querySelectorAll(".square");
     const history_ = document.querySelectorAll(".history_");
 
@@ -82,6 +85,7 @@ function CustomBoard() {
       //col and row where the latest click happened
       clickPosition = "(row:" + row + ", col:" + col + ")";
 
+    //setState
     setBoard(newBoard);
     setXIsNext((prev) => !prev);
     setHistory((history) => [
@@ -94,6 +98,7 @@ function CustomBoard() {
       },
     ]);
 
+    //Remove className == "Active"
     history_.forEach((h) => h.classList.remove("active"));
 
     //check winner
@@ -163,7 +168,7 @@ function CustomBoard() {
     </button>
   );
 
-  //Reset score & update Player when Reload Page
+  //Reset score & update Player when Reload Page || ``Click Reset Button``
   useEffect(() => {
     player == "X" ? setXIsNext(true) : setXIsNext(false);
     setScores({ X: 0, O: 0 });
@@ -221,15 +226,15 @@ function CustomBoard() {
         </div>
         <div className=" flex gap-x-2">
           <button
-            className="p-2 mt-5 bg-slate-700 text-white rounded-md hover:bg-slate-200 hover:text-slate-700 
-           transition-all duration-300"
+            className="p-1 mt-5 bg-slate-700 text-white rounded-md hover:bg-slate-200 hover:text-slate-700 
+           transition-all duration-300 md:p-2"
             onClick={() => handleReset()}
           >
             Reset
           </button>
           <button
-            className="p-2 mt-5 bg-slate-700 text-white rounded-md hover:bg-slate-200 hover:text-slate-700 
-           transition-all duration-300"
+            className="p-1 mt-5 bg-slate-700 text-white rounded-md hover:bg-slate-200 hover:text-slate-700 
+           transition-all duration-300 md:p-2"
             onClick={() => setShowHistory((showHistory) => !showHistory)}
           >
             History
@@ -250,8 +255,13 @@ export default CustomBoard;
 
 function calculateWinner(squares, boardSize) {
   const lines = [];
+  let size = 3;
+
+  if (boardSize > 5) {
+    size = boardSize - 1;
+  }
   // Generate winning combinations for rows
-  for (let row = 0; row < boardSize; row++) {
+  for (let row = 0; row < size; row++) {
     for (let col = 0; col <= boardSize - 3; col++) {
       lines.push([
         row * boardSize + col,
