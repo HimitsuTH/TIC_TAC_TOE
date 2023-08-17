@@ -255,13 +255,8 @@ export default CustomBoard;
 
 function calculateWinner(squares, boardSize) {
   const lines = [];
-  let size = 3;
-
-  if (boardSize > 5) {
-    size = boardSize - 1;
-  }
   // Generate winning combinations for rows
-  for (let row = 0; row < size; row++) {
+  for (let row = 0; row < boardSize; row++) {
     for (let col = 0; col <= boardSize - 3; col++) {
       lines.push([
         row * boardSize + col,
